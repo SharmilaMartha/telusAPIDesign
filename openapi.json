@@ -154,10 +154,10 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/Account"
+                "$ref" : "#/components/schemas/NewAccount"
               },
               "example" : {
-                "$ref" : "#/components/examples/AccountExample"
+                "$ref" : "#/components/examples/AccountExample2"
               }
             }
           }
@@ -235,7 +235,7 @@
                 "$ref" : "#/components/schemas/NewSubscription"
               },
               "example" : {
-                "$ref" : "#/components/examples/SubscriptionsExample"
+                "$ref" : "#/components/examples/NewSubscriptionsExample"
               }
             }
           }
@@ -249,7 +249,7 @@
                   "$ref" : "#/components/schemas/Subscription"
                 },
                 "example" : {
-                  "$ref" : "#/components/examples/NewSubscriptionsExample"
+                  "$ref" : "#/components/examples/SubscriptionsExample"
                 }
               }
             }
@@ -302,10 +302,10 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/Subscription"
+                "$ref" : "#/components/schemas/UpdateSubscription"
               },
               "example" : {
-                "$ref" : "#/components/examples/SubscriptionsExample"
+                "$ref" : "#/components/examples/UpdateSubscriptionExample"
               }
             }
           }
@@ -433,6 +433,23 @@
           }
         }
       },
+      "UpdateSubscription" : {
+        "type" : "object",
+        "properties" : {
+          "phoneNumber" : {
+            "type" : "number",
+            "format" : "long"
+          },
+          "status" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "pricePlan" : {
+            "type" : "integer",
+            "format" : "int"
+          }
+        }
+      },
       "inline_response_201" : {
         "type" : "object",
         "properties" : {
@@ -527,12 +544,10 @@
       },
       "AccountExample2" : {
         "value" : {
-          "id" : 5,
           "sin" : 854756215,
           "balance" : 2281.25,
           "status" : "Active",
           "billingAddress" : {
-            "addressId" : 11,
             "addressLine1" : "321 Alaxander Street",
             "addressLine2" : "Apt 21",
             "city" : "Ottawa",
@@ -569,6 +584,13 @@
             "status" : "Active",
             "pricePlan" : 70
           } ]
+        }
+      },
+      "UpdateSubscriptionExample" : {
+        "value" : {
+          "phoneNumber" : 9876543210,
+          "status" : "Inactive",
+          "pricePlan" : 50
         }
       }
     },
