@@ -1,0 +1,590 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Sample Password Flow OAuth2 Project",
+    "description" : "This is an example of using OAuth2 Password Flow in a specification to describe security to your API.",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/sharmilamartha9/telus/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  }, {
+    "url" : "https://virtserver.swaggerhub.com/sharmilamartha9/subscription/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "security" : [ {
+    "password" : [ "read", "write" ]
+  } ],
+  "paths" : {
+    "/example" : {
+      "get" : {
+        "summary" : "Server example operation",
+        "description" : "This is an example operation to show how security is applied to the call.",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/ping" : {
+      "get" : {
+        "summary" : "Server heartbeat operation",
+        "description" : "This operation shows how to override the global security defined above, as we want to open it up for all users.",
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "security" : [ ]
+      }
+    },
+    "/account" : {
+      "get" : {
+        "summary" : "Retrieves all attributes for accountid",
+        "description" : "This operation returns information related to the `accountid`",
+        "parameters" : [ {
+          "name" : "accountid",
+          "in" : "query",
+          "description" : "The account ID",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "An Account object.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Account"
+                },
+                "examples" : {
+                  "objectExample" : {
+                    "$ref" : "#/components/examples/AccountExample"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "The specified `accountid` is invalid (not a number)."
+          },
+          "default" : {
+            "description" : "Unexpected error"
+          }
+        },
+        "security" : [ ]
+      },
+      "post" : {
+        "summary" : "Adds a new account",
+        "description" : "Creates a new account with data provided in request body.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NewAccount"
+              },
+              "example" : {
+                "$ref" : "#/components/examples/AccountExample2"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Account Created Successfully",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_201"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "The payload has invalid entries."
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Delete record for an account id",
+        "description" : "All data for the account id in path variable will be deleted.",
+        "parameters" : [ {
+          "name" : "accountid",
+          "in" : "path",
+          "description" : "The account ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Account deleted Successfully."
+          },
+          "404" : {
+            "description" : "An account with the specified ID was not found."
+          }
+        }
+      },
+      "patch" : {
+        "summary" : "Updates attributes for an account id",
+        "description" : "For account-id in uri, only those attributes provided in body will be updated.",
+        "parameters" : [ {
+          "name" : "accountid",
+          "in" : "path",
+          "description" : "The account ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Account"
+              },
+              "example" : {
+                "$ref" : "#/components/examples/AccountExample"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Account updated Successfully"
+          },
+          "400" : {
+            "description" : "The payload has invalid entries."
+          },
+          "404" : {
+            "description" : "An account with the specified ID was not found."
+          }
+        }
+      }
+    },
+    "/subscription" : {
+      "get" : {
+        "summary" : "Retrieves all attributes for accountid",
+        "description" : "This operation returns all subscriptions related to the `accountid`. If a `subscriptionId` is provided, it'll return 1 object with attributes for queried subscriptionId. ",
+        "parameters" : [ {
+          "name" : "accountid",
+          "in" : "query",
+          "description" : "The account ID",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        }, {
+          "name" : "subscriptionId",
+          "in" : "query",
+          "description" : "The subscription ID",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "A Subscription object.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Subscription"
+                },
+                "example" : {
+                  "$ref" : "#/components/examples/SubscriptionsExample"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "The specified `accountid` and/or `subscriptionId` is invalid (not a number)."
+          },
+          "default" : {
+            "description" : "Unexpected error"
+          }
+        },
+        "security" : [ ]
+      },
+      "post" : {
+        "summary" : "Adds a new Subscription",
+        "description" : "Creates a new subscription with data provided in request body.",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NewSubscription"
+              },
+              "example" : {
+                "$ref" : "#/components/examples/SubscriptionsExample"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Subscription Created Successfully. Here are new subscription ids with requested payload.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Subscription"
+                },
+                "example" : {
+                  "$ref" : "#/components/examples/NewSubscriptionsExample"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "The payload has invalid entries."
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Delete record for a Subscription id",
+        "description" : "All data for the subscription id in path variable will be deleted.",
+        "parameters" : [ {
+          "name" : "subscriptionId",
+          "in" : "path",
+          "description" : "The subscription ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Subscription deleted Successfully."
+          },
+          "404" : {
+            "description" : "A subscription with the specified ID was not found."
+          }
+        }
+      },
+      "patch" : {
+        "summary" : "Updates attributes for a subscription id",
+        "description" : "For subscription id in uri, only those attributes provided in body will be updated.",
+        "parameters" : [ {
+          "name" : "subscriptionId",
+          "in" : "path",
+          "description" : "The subscription ID",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Subscription"
+              },
+              "example" : {
+                "$ref" : "#/components/examples/SubscriptionsExample"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Subscription updated Successfully"
+          },
+          "400" : {
+            "description" : "The payload has invalid entries."
+          },
+          "404" : {
+            "description" : "A Subscription with the specified ID was not found."
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Account" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "sin" : {
+            "type" : "integer",
+            "format" : "int"
+          },
+          "balance" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "status" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "billingAddress" : {
+            "$ref" : "#/components/schemas/BillingAddress"
+          }
+        }
+      },
+      "NewAccount" : {
+        "required" : [ "balance", "billingAddress", "sin", "status" ],
+        "type" : "object",
+        "properties" : {
+          "sin" : {
+            "type" : "integer",
+            "format" : "int"
+          },
+          "balance" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "status" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "billingAddress" : {
+            "$ref" : "#/components/schemas/NewAccount_billingAddress"
+          }
+        }
+      },
+      "BillingAddress" : {
+        "required" : [ "addressLine1", "city", "postalCode", "province" ],
+        "type" : "object",
+        "properties" : {
+          "addressId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "addressLine1" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "addressLine2" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "city" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "province" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "postalCode" : {
+            "type" : "string",
+            "format" : "string"
+          }
+        }
+      },
+      "Subscription" : {
+        "type" : "object",
+        "properties" : {
+          "accountid" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "subscriptions" : {
+            "required" : [ "phoneNumber", "pricePlan", "status" ],
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Subscription_subscriptions"
+            }
+          }
+        }
+      },
+      "NewSubscription" : {
+        "type" : "object",
+        "properties" : {
+          "accountid" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "subscriptions" : {
+            "required" : [ "phoneNumber", "pricePlan", "status" ],
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NewSubscription_subscriptions"
+            }
+          }
+        }
+      },
+      "inline_response_201" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "The account ID.",
+            "example" : 5
+          }
+        }
+      },
+      "NewAccount_billingAddress" : {
+        "required" : [ "addressLine1", "city", "postalCode", "province" ],
+        "type" : "object",
+        "properties" : {
+          "addressLine1" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "addressLine2" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "city" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "province" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "postalCode" : {
+            "type" : "string",
+            "format" : "string"
+          }
+        }
+      },
+      "Subscription_subscriptions" : {
+        "type" : "object",
+        "properties" : {
+          "subscriptionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "phoneNumber" : {
+            "type" : "number",
+            "format" : "long"
+          },
+          "status" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "pricePlan" : {
+            "type" : "integer",
+            "format" : "int"
+          }
+        }
+      },
+      "NewSubscription_subscriptions" : {
+        "type" : "object",
+        "properties" : {
+          "phoneNumber" : {
+            "type" : "number",
+            "format" : "long"
+          },
+          "status" : {
+            "type" : "string",
+            "format" : "string"
+          },
+          "pricePlan" : {
+            "type" : "integer",
+            "format" : "int"
+          }
+        }
+      }
+    },
+    "examples" : {
+      "AccountExample" : {
+        "value" : {
+          "id" : 4,
+          "sin" : 123456789,
+          "balance" : 1235.05,
+          "status" : "Active",
+          "billingAddress" : {
+            "addressId" : 10,
+            "addressLine1" : "123 Anderson Street",
+            "addressLine2" : "Unit 101",
+            "city" : "Toronto",
+            "province" : "Ontario",
+            "postalCode" : "1K1 2L9"
+          }
+        }
+      },
+      "AccountExample2" : {
+        "value" : {
+          "id" : 5,
+          "sin" : 854756215,
+          "balance" : 2281.25,
+          "status" : "Active",
+          "billingAddress" : {
+            "addressId" : 11,
+            "addressLine1" : "321 Alaxander Street",
+            "addressLine2" : "Apt 21",
+            "city" : "Ottawa",
+            "province" : "Ontario",
+            "postalCode" : "5K1 0L9"
+          }
+        }
+      },
+      "SubscriptionsExample" : {
+        "value" : {
+          "accountid" : 4,
+          "subscriptions" : [ {
+            "subscriptionId" : 10,
+            "phoneNumber" : 9876543210,
+            "status" : "Active",
+            "pricePlan" : 50
+          }, {
+            "subscriptionId" : 20,
+            "phoneNumber" : 9876543212,
+            "status" : "Active",
+            "pricePlan" : 70
+          } ]
+        }
+      },
+      "NewSubscriptionsExample" : {
+        "value" : {
+          "accountid" : 4,
+          "subscriptions" : [ {
+            "phoneNumber" : 9876543210,
+            "status" : "Active",
+            "pricePlan" : 50
+          }, {
+            "phoneNumber" : 9876543212,
+            "status" : "Active",
+            "pricePlan" : 70
+          } ]
+        }
+      }
+    },
+    "securitySchemes" : {
+      "password" : {
+        "type" : "oauth2",
+        "flows" : {
+          "password" : {
+            "tokenUrl" : "http://example.com/oauth/token",
+            "scopes" : {
+              "write" : "allows modifying resources",
+              "read" : "allows reading resources"
+            }
+          }
+        }
+      }
+    }
+  }
+}
